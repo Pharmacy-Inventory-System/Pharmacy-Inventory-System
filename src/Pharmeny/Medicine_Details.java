@@ -322,11 +322,12 @@ public class Medicine_Details extends javax.swing.JFrame {
             model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
             
-            String query = "SELECT * FROM medicines WHERE name LIKE ? OR category LIKE ? OR supplier LIKE ?";
+            String query = "SELECT * FROM medicines WHERE name LIKE ? OR category LIKE ? OR supplier LIKE ? or medicine_id LIKE ?";
             PreparedStatement pst = conn.prepareStatement(query);
             pst.setString(1, "%" + keyword + "%");
             pst.setString(2, "%" + keyword + "%");
             pst.setString(3, "%" + keyword + "%");
+            pst.setString(4, "%" + keyword + "%");
             
             ResultSet rs = pst.executeQuery();
             
@@ -367,6 +368,7 @@ public class Medicine_Details extends javax.swing.JFrame {
             pst.setString(6, supplier_out.getText());
             
             int rows = pst.executeUpdate();
+            
             if (rows > 0) {
                 JOptionPane.showMessageDialog(this, "Medicine added successfully!");
                 clearForm();
