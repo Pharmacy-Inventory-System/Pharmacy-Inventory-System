@@ -256,7 +256,7 @@ public class Supplier_details extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name", "Contact", "Email", "Address", "Total Medicine"
+                "ID", "Name", "Contact", "Email", "Address"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -334,24 +334,35 @@ public class Supplier_details extends javax.swing.JFrame {
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
         // TODO add your handling code here:
         try {
-        pst = con.prepareStatement(
-            "UPDATE suppliers SET name=?, contact=?, email=?, address=? WHERE supplier_id=?");
+            if(sup_id_out.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Enter an id before adding supplier!");
+            }
+            else if(contact_out.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Enter a contact number before adding supplier!");
+            }
+            else if(name_out.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Enter a name before adding supplier!");
+            }
+            else{
+                pst = con.prepareStatement(
+                    "UPDATE suppliers SET name=?, contact=?, email=?, address=? WHERE supplier_id=?");
 
-        pst.setString(1, name_out.getText());
-        pst.setString(2, contact_out.getText());
-        pst.setString(3, email_out.getText());
-        pst.setString(4, address_out.getText());
-        pst.setInt(5, Integer.parseInt(sup_id_out.getText()));
+                pst.setString(1, name_out.getText());
+                pst.setString(2, contact_out.getText());
+                pst.setString(3, email_out.getText());
+                pst.setString(4, address_out.getText());
+                pst.setInt(5, Integer.parseInt(sup_id_out.getText()));
 
-        pst.executeUpdate();
+                pst.executeUpdate();
+        
+                JOptionPane.showMessageDialog(this, "Supplier Updated");
+                clearFields();
+                loadSuppliers();
+            }
 
-        JOptionPane.showMessageDialog(this, "Supplier Updated");
-        clearFields();
-        loadSuppliers();
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, e.getMessage());
-    }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_updateActionPerformed
 
     private void SearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchActionPerformed
@@ -360,8 +371,9 @@ public class Supplier_details extends javax.swing.JFrame {
         model.setRowCount(0);
 
         pst = con.prepareStatement(
-            "SELECT * FROM suppliers WHERE name LIKE ?");
+            "SELECT * FROM suppliers WHERE name LIKE ? or supplier_id LIKE ?");
         pst.setString(1, "%" + search_out.getText() + "%");
+        pst.setString(2, "%" + search_out.getText() + "%");
 
         rs = pst.executeQuery();
 
@@ -371,8 +383,7 @@ public class Supplier_details extends javax.swing.JFrame {
                 rs.getString("name"),
                 rs.getString("contact"),
                 rs.getString("email"),
-                rs.getString("address"),
-                0
+                rs.getString("address")
             });
         }
 
@@ -385,23 +396,35 @@ public class Supplier_details extends javax.swing.JFrame {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         try {
-        pst = con.prepareStatement(
-            "INSERT INTO suppliers(name, contact, email, address) VALUES (?,?,?,?)");
+            if(sup_id_out.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Enter an id before adding supplier!");
+            }
+            else if(contact_out.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Enter a contact number before adding supplier!");
+            }
+            else if(name_out.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Enter a name before adding supplier!");
+            }
+            else{
+             
+                pst = con.prepareStatement(
+                    "INSERT INTO suppliers(name, contact, email, address) VALUES (?,?,?,?)");
 
-        pst.setString(1, name_out.getText());
-        pst.setString(2, contact_out.getText());
-        pst.setString(3, email_out.getText());
-        pst.setString(4, address_out.getText());
+                pst.setString(1, name_out.getText());
+                pst.setString(2, contact_out.getText());
+                pst.setString(3, email_out.getText());
+                pst.setString(4, address_out.getText());
 
-        pst.executeUpdate();
+                pst.executeUpdate();
 
-        JOptionPane.showMessageDialog(this, "Supplier Added Successfully");
-        clearFields();
-        loadSuppliers();
+                JOptionPane.showMessageDialog(this, "Supplier Added Successfully");
+                clearFields();
+                loadSuppliers();
+            }
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, e.getMessage());
-    }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_addActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
